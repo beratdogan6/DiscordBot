@@ -1,14 +1,18 @@
 import User from '../model/user.js'
 
-export default async function cash(interaction) {
-    const user = await User.findOne({ discordId: interaction.user.id })
+export default async function cash(message) {
+    const user = await User.findOne({ discordId: message.author.id })
+    const sender = message.author.username;
+
     if (!user) {
-        return interaction.reply({
-            content: 'You are not registered in the database!'
+        await User.create({ discordId: message.author.id });
+
+        return message.reply({
+            content: `**${sender}** Your total cash is 0.`
         });
     } else {
-        return interaction.reply({
-            content: `Your total cash is ${user.coin}`
+        return message.reply({
+            content: `**${sender}** Your total cash is ${user.coin}`
         });
     }
 }

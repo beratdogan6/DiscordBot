@@ -2,8 +2,7 @@ import { config } from 'dotenv'
 import { Client, GatewayIntentBits, Routes } from 'discord.js';
 import { REST } from '@discordjs/rest'
 import mongoose from 'mongoose'
-import { dailyCommand, orderCommand, registerCommand, cashCommand } from './commands/index.js'
-import { dailyReward, register, cash } from './services/index.js'
+import { dailyReward, cash, guess, coinFlip } from './services/index.js'
 import formatTimeStamp from './utils/formatTimeStamp.js'
 import User from './model/user.js'
 
@@ -26,6 +25,8 @@ const rest = new REST({ version: '10' }).setToken(TOKEN)
 
 client.login(TOKEN)
 
+let prefix = 'uwu';
+
 // on ready function
 client.on('ready', async () => {
     mongoose.connect(process.env.MONGO_DB_URL, {
@@ -44,57 +45,32 @@ client.on('ready', async () => {
         })
     });
 
-    console.log(users);
-
     console.log(`${client.user.tag} has logged in! 🤖`);
 })
 
 // on message function
 client.on('messageCreate', (message) => {
-    let formattedTimestamp = formatTimeStamp(message.createdTimestamp)
-    // console.log(message);
-    // console.log(`Message: ${message.content} \nSender: ${message.author.username}#${message.author.discriminator} \nTime: ${formattedTimestamp}`);
-})
+    if (message.content.startsWith(prefix)) {
+        const args = message.content.slice(4).trim().split(/ +/);
+        const command = args.shift().toLowerCase();
 
-client.on('interactionCreate', (interaction) => {
-    if (interaction.isChatInputCommand()) {
-        switch (interaction.commandName) {
-            case 'order':
-                interaction.reply({
-                    content: `You ordered ${interaction.options.get('food').value} and ${interaction.options.get('drink').value}`
-                })
-                break;
-            case 'daily':
-                dailyReward(interaction);
-                break;
-            case 'register':
-                register(interaction);
-                break;
-            case 'cash':
-                console.log(interaction.user.id);
-                cash(interaction);
-                break;
+        if (command === 'ping') {
+            message.reply('Pong!');
+        }
+        else if (command === 'guess') {
+            guess(message);
+        }
+        else if (command === 'daily') {
+            dailyReward(message);
+        }
+        else if (command === 'cash') {
+            cash(message);
+        }
+        else if (command === 'cf') {
+            coinFlip(message);
+        }
+        else {
+            message.reply(`Unknown command. Type ${prefix} help for more information.`);
         }
     }
 })
-
-// slash commands
-async function main() {
-    const commands = [
-        orderCommand,
-        dailyCommand,
-        registerCommand,
-        cashCommand
-    ];
-
-    try {
-        console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
-            body: commands,
-        })
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-main();

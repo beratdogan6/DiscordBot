@@ -1,22 +1,26 @@
 import User from '../model/user.js'
 
-export default async function dailyReward(interaction) {
-    const user = await User.findOne({ discordId: interaction.user.id });
-    console.log(user);
+export default async function dailyReward(message) {
+    const user = await User.findOne({ discordId: message.author.id });
+    const sender = message.author.username;
+
     if (!user) {
-        return interaction.reply({
-            content: 'You are not registered in the database!'
+        await User.create({ discordId: message.author.id, coin: 500, dailyReward: true });
+        return message.reply({
+            content: `💰 | **${sender}** You have received your daily reward! \n💶 | Here is your 500 Coin!`
         });
+    } else {
+        if (user.dailyReward) {
+            return message.reply({
+                content: `**${sender}** You have already taken your daily reward!`
+            });
+        } else {
+            user.coin += 500;
+            user.dailyReward = true;
+            await user.save();
+            return message.reply({
+                content: `💰 | **${sender}** You have received your daily reward! \n💶 | Here is your 500 Coin!`
+            });
+        }
     }
-    if (user.dailyReward) {
-        return interaction.reply({
-            content: 'You have already taken your daily reward!'
-        });
-    }
-    user.coin += 500;
-    user.dailyReward = true;
-    await user.save();
-    return interaction.reply({
-        content: 'You have received your daily reward!'
-    });
 }
