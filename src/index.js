@@ -21,8 +21,6 @@ const client = new Client({
     ]
 })
 
-const rest = new REST({ version: '10' }).setToken(TOKEN)
-
 client.login(TOKEN)
 
 let prefix = 'uwu';
@@ -54,23 +52,25 @@ client.on('messageCreate', (message) => {
         const args = message.content.slice(4).trim().split(/ +/);
         const command = args.shift().toLowerCase();
 
-        if (command === 'ping') {
-            message.reply('Pong!');
-        }
-        else if (command === 'guess') {
-            guess(message);
-        }
-        else if (command === 'daily') {
-            dailyReward(message);
-        }
-        else if (command === 'cash') {
-            cash(message);
-        }
-        else if (command === 'cf') {
-            coinFlip(message);
-        }
-        else {
-            message.reply(`Unknown command. Type ${prefix} help for more information.`);
+        switch (command) {
+            case 'ping':
+                message.reply('Pong!');
+                break;
+            case 'guess':
+                guess(message);
+                break;
+            case 'daily':
+                dailyReward(message);
+                break;
+            case 'cash':
+                cash(message);
+                break;
+            case 'cf':
+                coinFlip(message);
+                break;
+            default:
+                message.reply(`Unknown command. Type ${prefix} help for more information.`);
+                break;
         }
     }
 })
