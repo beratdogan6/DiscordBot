@@ -1,16 +1,12 @@
-import { config } from 'dotenv'
+import { config } from 'dotenv';
 import { Client, GatewayIntentBits, Routes } from 'discord.js';
-import { REST } from '@discordjs/rest'
-import mongoose from 'mongoose'
-import { dailyReward, cash, guess, coinFlip } from './services/index.js'
-import formatTimeStamp from './utils/formatTimeStamp.js'
-import User from './model/user.js'
+import { REST } from '@discordjs/rest';
+import mongoose from 'mongoose';
+import { dailyReward, cash, guess, coinFlip } from './services/index.js';
+import formatTimeStamp from './utils/formatTimeStamp.js';
+import User from './model/user.js';
 
 config();
-
-const TOKEN = process.env.DISCORD_BOT_TOKEN;
-const CLIENT_ID = process.env.CLIENT_ID;
-const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
 const client = new Client({
     intents: [
@@ -21,7 +17,7 @@ const client = new Client({
     ]
 })
 
-client.login(TOKEN)
+client.login(process.env.DISCORD_BOT_TOKEN)
 
 let prefix = 'uwu';
 
