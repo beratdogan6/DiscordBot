@@ -46,31 +46,48 @@ client.on('ready', async () => {
     console.log(`${client.user.tag} has logged in! 🤖`);
 })
 
+
 // on message function
 client.on('messageCreate', (message) => {
     if (message.content.startsWith(prefix)) {
-        const args = message.content.slice(4).trim().split(/ +/);
-        const command = args.shift().toLowerCase();
 
-        switch (command) {
-            case 'ping':
-                message.reply(`🏓Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
-                break;
-            case 'guess':
-                guess(message);
-                break;
-            case 'daily':
-                dailyReward(message);
-                break;
-            case 'cash':
-                cash(message);
-                break;
-            case 'cf':
-                coinFlip(message);
-                break;
-            default:
-                message.reply(`Unknown command. Type ${prefix} help for more information.`);
-                break;
-        }
+        const args = message.content.slice(4).trim().split(/ +/);
+        var command = args.shift().toLowerCase();
+
+            switch (command) {
+                case "c": // not change about this code block if you are not ahmet and if you are ahmet it is okay you can do everthing
+                    command = message.content.split("uwu c")[1].trim();
+                    if (command === "naber") {
+                        message.channel.send("İyidir, Zat-I Şahaneleri, Sizi Sormalı?");
+                    }
+                    if (command.includes("iyidir") || command.includes("iyiyim") || command.includes("iyi")) {
+                        message.channel.send("Bu Harika Zat-ı Şahaneleri, Size Nasıl Yardımcı Olabilirim?");
+                    }
+                    if (command.includes("yardımcı olamazsın")) {
+                        message.channel.send("Kalbimi Kırdınız Zat-ı Şahaneleri Hemde Bir Kalbim Olmamasına Rağmen, Küstüm Ağlamaya Gidiyorum :(");
+                    }
+                    if (command === "beratı çağır") {
+                        message.channel.send("Hemen Zat-I Şahaneleri, Sahibim Berat Doğan Hemen Bakarmısınız Lan Buraya");
+                    }
+                    break;
+                case 'ping':
+                    message.reply(`🏓Message Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
+                    break;
+                case 'guess':
+                    guess(message);
+                    break;
+                case 'daily':
+                    dailyReward(message);
+                    break;
+                case 'cash':
+                    cash(message);
+                    break;
+                case 'cf':
+                    coinFlip(message);
+                    break;
+                default:
+                    message.reply(`Unknown command. Type ${prefix} help for more information.`);
+                    break;
+            }
     }
 })
