@@ -54,7 +54,7 @@ client.on('messageCreate', (message) => {
 
         switch (command) {
             case 'ping':
-                message.reply('Pong!');
+                message.reply(`🏓Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
                 break;
             case 'guess':
                 guess(message);
